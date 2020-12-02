@@ -1,0 +1,146 @@
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Speech Detection</title>
+   </head>
+   <body>
+      <h1>Speech Detection</h1>
+      <div class="tips">
+         <small style="text-align: center"></small>
+            allow acces to <b>microphone,</b> then use a supported browser like
+            <b>google chrome</b> and speak clearly to your device</small
+         >
+         <ul>
+            <b>TIPS:</b>
+            try to include
+            <li>"my name"</li>
+            <li>'love'</li>
+            <li>or 'the weather'</li>
+            and watch what happens 😊
+         </ul>
+      </div>
+      <div class="effect"></div>
+      <div class="words" contenteditable></div>
+
+      <script>
+         window.SpeechRecognition =
+            window.SpeechRecognition || window.webkitSpeechRecognition;
+         const recognition = new SpeechRecognition();
+         recognition.interimResults = true;
+         let effect = document.querySelector(".effect");
+         let p = document.createElement("p");
+         const words = document.querySelector(".words");
+         words.appendChild(p);
+
+         recognition.addEventListener("result", (e) => {
+            const transcript = Array.from(e.results)
+               .map((result) => result[0])
+               .map((result) => result.transcript)
+               .join("");
+            p.textContent = transcript;
+            if (e.results[0].isFinal) {
+               p = document.createElement("p");
+               words.appendChild(p);
+            }
+            if (transcript.includes("my name")) {
+               effect.textContent = "@DevZaks";
+               effect.style.padding = '10px'
+               console.log(
+                  "%c ZAKS",
+                  "color: blue; font-size: 60px; background: white; color:black"
+               );
+            }
+            if (transcript.includes("love")) {
+               effect.textContent = "❤🧡";
+               console.log("%c ❤🧡", "color: blue; font-size: 70px;");
+            }
+            if (transcript.includes("the weather")) {
+               effect.textContent = "not yet connected to the weather API";
+               console.log(
+                  "%c getting the weather",
+                  "color: blue; font-size: 50px; background: white;"
+               );
+            }
+            console.log(transcript);
+         });
+
+         recognition.addEventListener("end", recognition.start);
+         recognition.start();
+      </script>
+
+      <style>
+         html {
+            font-size: 10px;
+         }
+
+         body {
+            /* background: #ffc600; */
+            font-family: "helvetica neue";
+            font-weight: 200;
+            font-size: 20px;
+         }
+
+         .words {
+            max-width: 500px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem 1rem 5rem;
+            background: -webkit-gradient(
+                  linear,
+                  0 0,
+                  0 100%,
+                  from(#d9eaf3),
+                  color-stop(4%, #fff)
+               )
+               0 4px;
+            background-size: 100% 3rem;
+            position: relative;
+            line-height: 3rem;
+         }
+
+         p {
+            margin: 0 0 3rem;
+         }
+
+         .words:before {
+            content: "";
+            position: absolute;
+            width: 4px;
+            top: 0;
+            left: 30px;
+            bottom: 0;
+            border: 1px solid;
+            border-color: transparent #efe4e4;
+         }
+         .effect {
+            color: blue;
+            font-size: 60px;
+            font-weight: bold;
+            background: black;
+            display: block;
+            text-align: center;
+            width: fit-content;
+            margin: auto; border-radius: 10px;
+            /* color: black; */
+         }
+         h1 {
+            text-align: center;
+         }
+         small {
+            text-align: center;
+            margin: 0 auto;
+         }
+         /* ul */
+         li {
+            list-style: none;
+         }
+         .tips {
+            margin: 0 auto;
+            max-width: 500px;
+         }
+      </style>
+   </body>
+</html>
